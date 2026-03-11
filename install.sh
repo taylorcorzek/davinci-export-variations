@@ -1,17 +1,23 @@
 #!/bin/bash
-# Install ExportVariations script for DaVinci Resolve
+# Install Corzek DaVinci Resolve scripts
 # Usage: bash install.sh
 
-DEST="/Library/Application Support/Blackmagic Design/DaVinci Resolve/Fusion/Scripts/Deliver/ExportVariations.lua"
-SRC="https://raw.githubusercontent.com/taylorcorzek/davinci-export-variations/main/ExportVariations.lua"
+BASE="https://raw.githubusercontent.com/taylorcorzek/davinci-export-variations/main"
+DEST="/Library/Application Support/Blackmagic Design/DaVinci Resolve/Fusion/Scripts/Deliver"
 
-echo "Installing ExportVariations for DaVinci Resolve..."
-curl -fsSL "$SRC" -o "$DEST"
+SCRIPTS=("ExportVariations.lua" "RoundClipFPS.lua")
 
-if [ $? -eq 0 ]; then
-    echo "Done. Restart DaVinci Resolve and find it under:"
-    echo "  Workspace > Scripts > Deliver > ExportVariations"
-else
-    echo "Install failed. Try running with sudo:"
-    echo "  sudo bash install.sh"
-fi
+echo "Installing Corzek DaVinci scripts..."
+
+for SCRIPT in "${SCRIPTS[@]}"; do
+    curl -fsSL "$BASE/$SCRIPT" -o "$DEST/$SCRIPT"
+    if [ $? -eq 0 ]; then
+        echo "  ✓ $SCRIPT"
+    else
+        echo "  ✗ $SCRIPT failed — try running with sudo: sudo bash install.sh"
+    fi
+done
+
+echo ""
+echo "Done. Restart DaVinci Resolve and find the scripts under:"
+echo "  Workspace > Scripts > Deliver"
